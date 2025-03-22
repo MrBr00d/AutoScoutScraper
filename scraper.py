@@ -1,10 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
-# from datetime import datetime
 from time import sleep
 import pandas as pd
+import numpy as np
 
-def request_website(page):
+def request_website(page:int) -> requests.Response:
     url = f"https://www.autoscout24.nl/lst?atype=C&cy=NL&desc=0&page={page}&search_id=nhip3icgk3&sort=standard&source=listpage_pagination&ustate=N%2CU"
     payload = {}
     headers = {'Accept': '*/*'}
@@ -12,7 +12,7 @@ def request_website(page):
     response = requests.request("GET", url, headers=headers, data=payload).text
     return response
 
-def get_listings() -> pd.DataFrame:
+def get_listings() -> np.array:
     guid = []
     price = []
     make = []
@@ -49,6 +49,9 @@ def get_listings() -> pd.DataFrame:
               'age': age,
               'transmission': transmission})
     return df
+
+def test():
+    print("this is a test")
 
 if __name__ == "__main__":
     data = get_listings()

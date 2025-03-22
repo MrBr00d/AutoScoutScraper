@@ -5,3 +5,5 @@ seaborn
 openpyxl
 requests
 beautifulsoup4
+pyarrow
+numpy
