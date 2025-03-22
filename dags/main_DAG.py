@@ -5,7 +5,7 @@ from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
-import scraper
+import dags.scraper as scraper
 
 # Define default arguments for the DAG
 default_args = {
