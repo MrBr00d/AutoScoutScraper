@@ -42,7 +42,7 @@ def hourly_dag_with_timedelta():
     def load(data:tuple):
         SQLExecuteQueryOperator(
             task_id='load_data_to_postgres',
-            conn_id='postgres',
+            conn_id='postgres_default',
             sql="""
             INSERT INTO car_data (guid, price, make, model, mileage, fuel_type, age, transmission)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
