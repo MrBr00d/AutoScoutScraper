@@ -5,7 +5,7 @@ from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
-import dags.scraper as scraper
+import scraper
 
 # Define default arguments for the DAG
 default_args = {
@@ -34,6 +34,7 @@ def hourly_dag_with_timedelta():
     @task
     def transform(df:pd.DataFrame):
         df["age"] = pd.to_datetime(df["age"], format="%m-%Y")
+        df["age"] = (datetime.now() - df["age"]).dt.days
         arr = df.replace([np.nan], [None]).to_numpy()
         data_tuples = [tuple(row) for row in arr]
         return data_tuples

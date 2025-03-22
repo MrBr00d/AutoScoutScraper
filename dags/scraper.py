@@ -50,9 +50,6 @@ def get_listings() -> np.array:
               'transmission': transmission})
     return df
 
-def test():
-    print("this is a test")
-
 if __name__ == "__main__":
     data = get_listings()
     data.to_excel("export.xlsx")

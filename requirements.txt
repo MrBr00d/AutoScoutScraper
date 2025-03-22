@@ -1,7 +1,4 @@
-notebook
-scikit-learn
 pandas
-seaborn
 openpyxl
 requests
 beautifulsoup4
