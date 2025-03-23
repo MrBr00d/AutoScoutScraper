@@ -5,6 +5,6 @@ CREATE TABLE IF NOT EXISTS car_data (
     model VARCHAR,
     mileage INTEGER,
     fuel_type VARCHAR,
-    age DATE,
+    age INTEGER,
     transmission VARCHAR
 );

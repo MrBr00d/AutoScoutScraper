@@ -41,16 +41,17 @@ def hourly_dag_with_timedelta():
     
     @task
     def load(data:tuple):
-        SQLExecuteQueryOperator(
-            task_id='load_data_to_postgres',
-            conn_id='postgres_default',
-            sql="""
-            INSERT INTO car_data (guid, price, make, model, mileage, fuel_type, age, transmission)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            ON CONFLICT (guid) DO NOTHING;
-            """,
-            parameters=data
-        ).execute(context={})
+        for row in data:
+            SQLExecuteQueryOperator(
+                task_id='load_data_to_postgres',
+                conn_id='postgres_default',
+                sql="""
+                INSERT INTO car_data (guid, price, make, model, mileage, fuel_type, age, transmission)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (guid) DO NOTHING;
+                """,
+                parameters=row
+            ).execute(context={})
         
     # Call the task to include it in the DAG
     extracted_data = extract()
