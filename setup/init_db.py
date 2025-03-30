@@ -3,9 +3,11 @@ from bs4 import BeautifulSoup
 # from datetime import datetime
 from time import sleep
 import pandas as pd
+import tqdm
+import random
 
-def request_website(page, cartype):
-    url = f"https://www.autoscout24.nl/lst?atype=C&body={cartype}&cy=NL&damaged_listing=exclude&desc=0&page={page}&powertype=kw&search_id=22ayf9w7x4y&sort=standard&source=listpage_pagination&ustate=N%2CU"
+def request_website(page, make):
+    url = f"https://www.autoscout24.nl/lst/{make}?atype=C&cy=NL&damaged_listing=exclude&desc=0&page={page}&powertype=kw&search_id=pahs15wiz4&sort=standard&source=homepage_search-mask&ustate=N%2CU"
     payload = {}
     headers = {'Accept': '*/*'}
 
@@ -13,6 +15,7 @@ def request_website(page, cartype):
     return response
 
 def get_listings(cartype) -> pd.DataFrame:
+    print(f"Searching for {cartype}...\n")
     guid = []
     price = []
     make = []
@@ -23,12 +26,12 @@ def get_listings(cartype) -> pd.DataFrame:
     transmission = []
 
     for i in range(1,21):
-        print(f"page {i}")
         response = request_website(i, cartype)
         soup = BeautifulSoup(response)
         res = soup.find_all("article")
 
         for i in range(len(res)):
+            pbar.update(1)
             guid.append(res[i]["data-guid"])
             price.append(res[i]["data-price"])
             make.append(res[i]['data-make'])
@@ -37,7 +40,7 @@ def get_listings(cartype) -> pd.DataFrame:
             fuel_type.append(res[i]["data-fuel-type"])
             age.append(res[i]['data-first-registration'])
             transmission.append(res[i].find("span", {"data-testid": "VehicleDetails-transmission"}).getText())
-        sleep(1)
+        sleep(1+random.random())
     
     
     df = pd.DataFrame({"guid": guid,
@@ -51,23 +54,10 @@ def get_listings(cartype) -> pd.DataFrame:
     return df
 
 if __name__ == "__main__":
-    cars = {"Hatchback": 1,
-            "Cabrio": 2,
-            "Coupe": 3,
-            "SUV": 4,
-            "Stationwagen": 5,
-            "Sedan": 6,
-            "MPV": 12,
-            "Bedrijfswagen":13}
-    for car, cartype in cars.items():
-        data = get_listings(cartype)
-        data.to_excel(f"{car}.xlsx")
-    df = pd.read_excel("Hatchback.xlsx", index_col=0)
-    df2 = pd.read_excel("SUV.xlsx", index_col=0)
-    df3 = pd.read_excel("Coupe.xlsx", index_col=0)
-    df4 = pd.read_excel("Cabrio.xlsx", index_col=0)
-    df5 = pd.read_excel("Stationwagen.xlsx", index_col=0)
-    df6 = pd.read_excel("Sedan.xlsx", index_col=0)
-    df7 = pd.read_excel("MPV.xlsx", index_col=0)
-    df8 = pd.read_excel("Bedrijfswagen.xlsx", index_col=0)
-    pd.concat([df,df2,df3,df4,df5,df6,df7,df8]).to_excel("total.xlsx", index=False)
+    df = pd.DataFrame()
+    cars = ["mercedes-benz", "audi", "bmw", "volkswagen", "Toyota", "Volvo", "ford", "mini", "peugeot", "citroen", "fiat", "hyundai", "kia", "nissan", "opel", "renault", "seat", "skoda"]
+    pbar = tqdm.tqdm(total=int(len(cars)*20*20))
+    for car in cars:
+        data = get_listings(cartype=car)
+        df = pd.concat([df,data])
+    df.to_csv("output.csv", index=False)
