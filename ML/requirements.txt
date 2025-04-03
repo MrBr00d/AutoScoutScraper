@@ -1,6 +1,5 @@
 pandas
 numpy
-fastapi
 fastapi[standard]
 scikit-learn
 xgboost
