@@ -14,3 +14,7 @@ This repo is as much pre-setup as possible however certain steps need to be take
 5. Access the airflow installation by going to *IP_OF_THE_HOST_MACHINE:8080*. e.g. *https://172.0.0.1:8080* and logging in with your credentials.
 6. Go to connections and add the postgres connection with connection id: `postgres_default`. *Host* is postgres and *port* is 5432.
 7. Start and run the DAG. If successful this will now populate the database.
+
+# Machine learning
+The *ML* folder contains a jupyter notebook with some machine learning and an `app.py` file which contains a fast API logic. This file can be used for website integration.
+To run the fastapi 
