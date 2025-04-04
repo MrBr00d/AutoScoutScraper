@@ -10,7 +10,7 @@ import datetime
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # You can specify a list of allowed origins
+    allow_origins=["https://mrbrood.zapto.org"],  # You can specify a list of allowed origins
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods
     allow_headers=["*"],  # Allow all headers
